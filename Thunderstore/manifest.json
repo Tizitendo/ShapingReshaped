@@ -1,7 +1,7 @@
 ﻿{
 	"name": "ShapingReshaped",
 	"version_number": "1.0.0",
-	"website_url": "https://github.com/Tizitendo/HalcyonKnight",
+	"website_url": "https://github.com/Tizitendo/ShapingReshaped",
 	"description": "Tweaks shaping shrines to have a downside",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2108",
