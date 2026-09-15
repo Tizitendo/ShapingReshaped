@@ -4,7 +4,6 @@ using Logger;
 using R2API;
 using RoR2;
 using RoR2.ContentManagement;
-using RoR2.Items;
 using RoR2BepInExPack.GameAssetPathsBetter;
 using UnityEngine;
 
@@ -60,7 +59,19 @@ public sealed class ShapingReshaped : BaseUnityPlugin
 
 		On.RoR2.CharacterMaster.TryReviveOnBodyDeath += TryReviveOnBodyDeath;
 		On.RoR2.SceneDirector.GenerateInteractableCardSelection += GenerateInteractableCardSelection;
+		RecalculateStatsAPI.GetStatCoefficients += GetStatCoefficients;
 	}
+
+	private void GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
+        {
+            if (!sender || !sender.inventory)
+				return;
+			
+			if (sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) > 0)
+			{
+				args.baseCurseAdd += (float)(sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) * DeathSoulCost.Value) / 100;
+			}
+        }
 
 	private static WeightedSelection<DirectorCard> GenerateInteractableCardSelection(On.RoR2.SceneDirector.orig_GenerateInteractableCardSelection orig, SceneDirector self)
 	{
@@ -84,28 +95,4 @@ public sealed class ShapingReshaped : BaseUnityPlugin
 		}
         return orig(self, body);
     }
-
-    public class CustomItemBehavior : BaseItemBodyBehavior
-	{
-		[BaseItemBodyBehavior.ItemDefAssociationAttribute(useOnServer = true, useOnClient = false)]
-		public static ItemDef GetItemDef() => ShapingPermanentSoulCost;
-
-		void OnEnable()
-		{
-			RecalculateStatsAPI.GetStatCoefficients += GetStatCoefficients;
-		}
-
-        void OnDisable()
-		{
-			RecalculateStatsAPI.GetStatCoefficients -= GetStatCoefficients;
-		}
-
-		private void GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            if (!sender || !sender.inventory)
-				return;
-
-			args.baseCurseAdd += (float)(sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) * DeathSoulCost.Value) / 100;
-        }
-	}
 }
