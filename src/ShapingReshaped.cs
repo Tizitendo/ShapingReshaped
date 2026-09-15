@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using Logger;
@@ -19,7 +20,7 @@ public sealed class ShapingReshaped : BaseUnityPlugin
     public const string PluginGUID = PluginAuthor + "." + PluginName;
     public const string PluginAuthor = "Onyx";
     public const string PluginName = "ShapingReshaped";
-    public const string PluginVersion = "1.0.0";
+    public const string PluginVersion = "1.0.1";
 
 	public static ShapingReshaped Instance;
 	public static ConfigEntry<int> InitialSoulCost { get; set; }
@@ -55,6 +56,7 @@ public sealed class ShapingReshaped : BaseUnityPlugin
 		ShapingPermanentSoulCost.loreToken = "SHAPINGPERMANENTSOULCOST_LORE";
 		ShapingPermanentSoulCost.hidden = true;
 		ShapingPermanentSoulCost.tier = ItemTier.NoTier;
+		ShapingPermanentSoulCost.tags = [ItemTag.WorldUnique];
 		ItemAPI.Add(new CustomItem(ShapingPermanentSoulCost, new ItemDisplayRuleDict(null)));
 
 		On.RoR2.CharacterMaster.TryReviveOnBodyDeath += TryReviveOnBodyDeath;
@@ -63,15 +65,15 @@ public sealed class ShapingReshaped : BaseUnityPlugin
 	}
 
 	private void GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
-        {
-            if (!sender || !sender.inventory)
-				return;
-			
-			if (sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) > 0)
-			{
-				args.baseCurseAdd += (float)(sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) * DeathSoulCost.Value) / 100;
-			}
-        }
+	{
+		if (!sender || !sender.inventory)
+			return;
+		
+		if (sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) > 0)
+		{
+			args.baseCurseAdd += (float)(sender.inventory.GetItemCountEffective(ShapingPermanentSoulCost.itemIndex) * DeathSoulCost.Value) / 100;
+		}
+	}
 
 	private static WeightedSelection<DirectorCard> GenerateInteractableCardSelection(On.RoR2.SceneDirector.orig_GenerateInteractableCardSelection orig, SceneDirector self)
 	{
