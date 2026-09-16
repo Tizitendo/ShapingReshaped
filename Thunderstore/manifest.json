@@ -1,6 +1,6 @@
 ﻿{
 	"name": "ShapingReshaped",
-	"version_number": "1.0.1",
+	"version_number": "1.0.2",
 	"website_url": "https://github.com/Tizitendo/ShapingReshaped",
 	"description": "Tweaks shaping shrines to have a downside",
 	"dependencies": [

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Configuration;
 using Logger;
@@ -20,7 +19,7 @@ public sealed class ShapingReshaped : BaseUnityPlugin
     public const string PluginGUID = PluginAuthor + "." + PluginName;
     public const string PluginAuthor = "Onyx";
     public const string PluginName = "ShapingReshaped";
-    public const string PluginVersion = "1.0.1";
+    public const string PluginVersion = "1.0.2";
 
 	public static ShapingReshaped Instance;
 	public static ConfigEntry<int> InitialSoulCost { get; set; }
@@ -55,7 +54,8 @@ public sealed class ShapingReshaped : BaseUnityPlugin
 		ShapingPermanentSoulCost.descriptionToken = "SHAPINGPERMANENTSOULCOST_DESC";
 		ShapingPermanentSoulCost.loreToken = "SHAPINGPERMANENTSOULCOST_LORE";
 		ShapingPermanentSoulCost.hidden = true;
-		ShapingPermanentSoulCost.tier = ItemTier.NoTier;
+
+		ShapingPermanentSoulCost.deprecatedTier = ItemTier.NoTier;
 		ShapingPermanentSoulCost.tags = [ItemTag.WorldUnique];
 		ItemAPI.Add(new CustomItem(ShapingPermanentSoulCost, new ItemDisplayRuleDict(null)));
 
